@@ -397,4 +397,23 @@ public class TaskServiceImpl implements ITaskService {
             throw new RuntimeException("执行联盟资源分配失败", e);
         }
     }
+
+    @Override
+    public Map<String, Object> getCoalitionDetails(Long taskId) {
+        Map<String, Object> result = new HashMap<>();
+        
+        // 获取任务对应的联盟信息
+        Coalition coalition = coalitionMapper.selectCoalitionByTaskId(taskId);
+        if (coalition == null) {
+            return null;
+        }
+        
+        // 获取联盟内的企业信息
+        List<Company> companies = coalitionMapper.selectCoalitionCompanies(coalition.getId());
+        
+        result.put("coalition", coalition);
+        result.put("companies", companies);
+        
+        return result;
+    }
 }

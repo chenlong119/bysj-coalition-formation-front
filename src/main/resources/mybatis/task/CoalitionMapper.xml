@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.task.mapper.CoalitionMapper">
+
+    <insert id="insertCoalition" parameterType="com.ruoyi.project.task.domain.Coalition" useGeneratedKeys="true" keyProperty="id">
+        insert into coalition (
+            name,
+            task_id,
+            coalition_status,
+            create_time,
+            transport_cost,
+            coalition_reputation
+        ) values (
+            #{name},
+            #{taskId},
+            #{coalitionStatus},
+            #{createTime},
+            #{transportCost},
+            #{coalitionReputation}
+        )
+    </insert>
+
+    <insert id="insertCoalitionCompany">
+        insert into coalition_company (coalition_id, company_id)
+        values
+        <foreach collection="companyIds" item="companyId" separator=",">
+            (#{coalitionId}, #{companyId})
+        </foreach>
+    </insert>
+
+    <select id="selectCoalitionByTaskId" parameterType="Long" resultType="com.ruoyi.project.task.domain.Coalition">
+        select c.*
+        from coalition c
+        where c.task_id = #{taskId}
+        order by c.create_time desc
+        limit 1
+    </select>
+
+    <select id="selectCoalitionCompanies" parameterType="Long" resultType="com.ruoyi.project.company.domain.Company">
+        select c.*
+        from company c
+        inner join coalition_company cc on c.id = cc.company_id
+        where cc.coalition_id = #{coalitionId}
+        order by c.chain_id
+    </select>
+</mapper>

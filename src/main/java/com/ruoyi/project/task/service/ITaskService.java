@@ -1,6 +1,7 @@
 package com.ruoyi.project.task.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.ruoyi.project.company.domain.Company;
 import com.ruoyi.project.company.domain.CompanyResource;
@@ -83,4 +84,6 @@ public interface ITaskService {
     CoalitionFormationResults coalitionFormation(Long taskId);
 
     int executeCoalitionAllocation(CoalitionExecuteParams params);
+
+    Map<String, Object> getCoalitionDetails(Long taskId);
 }

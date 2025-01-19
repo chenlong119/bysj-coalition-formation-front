@@ -154,4 +154,9 @@ public class TaskController extends BaseController {
     public AjaxResult executeCoalitionAllocation(@RequestBody CoalitionExecuteParams params) {
         return toAjax(taskService.executeCoalitionAllocation(params));
     }
+
+    @GetMapping("/coalition/details/{taskId}")
+    public AjaxResult getCoalitionDetails(@PathVariable("taskId") Long taskId) {
+        return success(taskService.getCoalitionDetails(taskId));
+    }
 }
