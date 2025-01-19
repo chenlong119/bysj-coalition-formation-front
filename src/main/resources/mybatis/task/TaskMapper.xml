@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.task.mapper.TaskMapper">
+    
+    <resultMap type="Task" id="TaskResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="taskChain"    column="task_chain"    />
+        <result property="budget"    column="budget"    />
+        <result property="arrivalTime"    column="arrival_time"    />
+        <result property="taskStatus"    column="task_status"    />
+        <result property="companyId"    column="company_id"    />
+    </resultMap>
+
+    <sql id="selectTaskVo">
+        select id, name, task_chain, budget, arrival_time, task_status, company_id from task
+    </sql>
+
+    <select id="selectTaskList" parameterType="Task" resultMap="TaskResult">
+        <include refid="selectTaskVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="taskChain != null "> and task_chain = #{taskChain}</if>
+            <if test="taskStatus != null "> and task_status = #{taskStatus}</if>
+            <if test="companyId != null "> and company_id = #{companyId}</if>
+        </where>
+    </select>
+    
+    <select id="selectTaskById" parameterType="Long" resultMap="TaskResult">
+        <include refid="selectTaskVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTask" parameterType="Task" useGeneratedKeys="true" keyProperty="id">
+        insert into task
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="taskChain != null">task_chain,</if>
+            <if test="budget != null">budget,</if>
+            <if test="arrivalTime != null">arrival_time,</if>
+            <if test="taskStatus != null">task_status,</if>
+            <if test="companyId != null">company_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="taskChain != null">#{taskChain},</if>
+            <if test="budget != null">#{budget},</if>
+            <if test="arrivalTime != null">#{arrivalTime},</if>
+            <if test="taskStatus != null">#{taskStatus},</if>
+            <if test="companyId != null">#{companyId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTask" parameterType="Task">
+        update task
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="taskChain != null">task_chain = #{taskChain},</if>
+            <if test="budget != null">budget = #{budget},</if>
+            <if test="arrivalTime != null">arrival_time = #{arrivalTime},</if>
+            <if test="taskStatus != null">task_status = #{taskStatus},</if>
+            <if test="companyId != null">company_id = #{companyId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTaskById" parameterType="Long">
+        delete from task where id = #{id}
+    </delete>
+
+    <delete id="deleteTaskByIds" parameterType="String">
+        delete from task where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectResourcesByTaskId" resultType="com.ruoyi.project.task.domain.TaskResource">
+        select * from task_resource where task_id = #{taskId}
+    </select>
+
+    <insert id="insertTaskResource">
+            insert into task_resource(task_id, resource_id, number) values (#{taskId}, #{resourceId}, #{number})
+    </insert>
+
+    <update id="updateTaskResource">
+        update task_resource set number=#{number} where task_id=#{taskId} and resource_id=#{resourceId}
+    </update>
+
+    <delete id="deleteTaskResource">
+        delete from task_resource where task_id=#{taskId} and resource_id=#{resourceId}
+    </delete>
+
+    <select id="selectTaskResource" resultType="com.ruoyi.project.task.domain.TaskResource">
+        select * from task_resource where task_id=#{taskId} and resource_id=#{resourceId}
+    </select>
+</mapper>

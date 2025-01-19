@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.company.mapper.CompanyResourceMapper">
+    <select id="selectByCompanyId" resultType="com.ruoyi.project.company.domain.CompanyResource">
+        select company_id, resource_id, number
+        from company_resource
+        where company_id = #{companyId}
+    </select>
+
+    <insert id="insert" parameterType="CompanyResource">
+        insert into company_resource (company_id, resource_id, number)
+        values (#{companyId}, #{resourceId}, #{number})
+    </insert>
+
+    <update id="update" parameterType="CompanyResource">
+        update company_resource
+        set number = #{number}
+        where company_id = #{companyId}
+          and resource_id = #{resourceId}
+    </update>
+
+    <delete id="delete">
+        delete
+        from company_resource
+        where company_id = #{companyId}
+          and resource_id = #{resourceId}
+    </delete>
+
+    <select id="getResourceSum" resultType="long">
+        select sum(number)
+        from company_resource
+        where resource_id = #{resourceId}
+    </select>
+
+    <select id="getCompanyCount" resultType="long">
+        select count(*)
+        from company_resource
+        where resource_id = #{resourceId}
+    </select>
+
+    <select id="selectByCompanyIdAndResourceId" resultType="com.ruoyi.project.company.domain.CompanyResource">
+        select company_id, resource_id, number
+        from company_resource
+        where company_id = #{companyId}
+          and resource_id = #{resourceId}
+    </select>
+
+    <select id="selectBatchCompanyResources" resultType="CompanyResource">
+        select company_id, resource_id, number
+        from company_resource
+    </select>
+
+    <update id="updateResourceAmount">
+    update company_resource
+    set number = company_resource.number + #{amount}
+    where company_id = #{companyId} and resource_id = #{resourceId}
+</update>
+</mapper>
