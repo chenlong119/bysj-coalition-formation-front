@@ -45,7 +45,7 @@
           and resource_id = #{resourceId}
     </select>
 
-    <select id="selectBatchCompanyResources" resultType="CompanyResource">
+    <select id="selectBatchCompanyResources" resultType="com.ruoyi.project.company.domain.CompanyResource">
         select company_id, resource_id, number
         from company_resource
     </select>
